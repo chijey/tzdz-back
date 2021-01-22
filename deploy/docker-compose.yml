@@ -1,0 +1,17 @@
+version: '3'
+services:
+  tzdz:
+    image: chijey/opensource_startup
+    container_name: tzdz
+    networks:
+      - custom_net
+    ports:
+      - "80:8000"
+    restart: always
+    entrypoint: "java -jar -Xms256m -Xmx512m /app.jar"
+
+
+networks:
+  custom_net:
+    external:
+      name: app_net
