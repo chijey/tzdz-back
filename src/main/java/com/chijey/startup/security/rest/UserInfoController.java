@@ -41,8 +41,8 @@ public class UserInfoController {
         return ResponseEntity.ok(verifyDTO);
     }
 
-    @ApiOperation("实名认证")
-    @PostMapping("/{openId}")
+    @ApiOperation("获取用户")
+    @GetMapping("/{openId}")
     public ResponseEntity verify(@PathVariable String openId) {
         UserInfo userInfo = userInfoService.findByOpenId(openId);
         User user = userService.findByOpenId(openId);
