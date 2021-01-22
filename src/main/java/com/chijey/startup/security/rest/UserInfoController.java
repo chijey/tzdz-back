@@ -59,7 +59,7 @@ public class UserInfoController {
     @ApiOperation("获取用户")
     @PostMapping("/pagination")
     public ResponseEntity pagination(@RequestBody PersonDTO param, @RequestParam("page") Integer page, @RequestParam("size") Integer size,
-                                     @RequestParam(value = "sort",defaultValue = "createTime") String sorts) {
+                                     @RequestParam(value = "sort",defaultValue = "createTime: DESC") String sorts) {
         Pageable pageable = ConvertUtils.pagingConvert(page,size,sorts);
         Page<UserInfo> userspage = userInfoService.pageination(param,pageable);
         return ResponseEntity.ok(userspage);
