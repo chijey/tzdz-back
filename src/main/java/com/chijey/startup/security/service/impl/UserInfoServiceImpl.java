@@ -60,10 +60,20 @@ public class UserInfoServiceImpl implements UserInfoService {
     public void verify(VerifyDTO verifyDTO) {
         String openId = SecurityUtil.getCurrentUserOpenId();
         IdCardVerify.IdentityCardVerification(verifyDTO.getIdCard());
+
         UserInfo userInfo = userInfoRepository.findByOpenId(openId);
+        if(userInfo.getIsRealNameValid()==1){
+            throw new RuntimeException("已经实名认证！");
+        }
         userInfo.setIdCard(verifyDTO.getIdCard());
         userInfo.setRealName(verifyDTO.getRealName());
         userInfo.setIsRealNameValid(1);
         userInfoRepository.save(userInfo);
+    }
+
+    @Override
+    public UserInfo findByOpenId(String openId) {
+        UserInfo userInfo = userInfoRepository.findByOpenId(openId);
+        return userInfo;
     }
 }
