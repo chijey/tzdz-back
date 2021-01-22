@@ -1,7 +1,11 @@
 package com.chijey.startup.security.service;
 
+import com.chijey.startup.param.PersonDTO;
 import com.chijey.startup.security.domain.User;
 import com.chijey.startup.common.base.Result;
+import com.chijey.startup.security.domain.UserInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 用户信息接口
@@ -67,6 +71,5 @@ public interface UserService {
      * @return 用户帐号对应的用户
      */
     Result<User> findByUserName(String userName);
-
 
 }

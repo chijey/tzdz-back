@@ -1,5 +1,6 @@
 package com.chijey.startup.security.service.impl;
 
+import com.chijey.startup.param.PersonDTO;
 import com.chijey.startup.security.utils.SecurityUtil;
 import com.chijey.startup.param.UserInfoDTO;
 import com.chijey.startup.param.VerifyDTO;
@@ -12,6 +13,8 @@ import com.chijey.startup.utils.IdCardVerify;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
@@ -75,5 +78,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     public UserInfo findByOpenId(String openId) {
         UserInfo userInfo = userInfoRepository.findByOpenId(openId);
         return userInfo;
+    }
+
+    @Override
+    public Page<UserInfo> pageination(PersonDTO param, Pageable pageable) {
+        Page<UserInfo> userInfoPage = userInfoRepository.findAll(pageable);
+        return userInfoPage;
     }
 }

@@ -1,5 +1,7 @@
 package com.chijey.startup.security.service.impl;
 
+import com.chijey.startup.param.PersonDTO;
+import com.chijey.startup.security.domain.UserInfo;
 import com.chijey.startup.security.repository.UserRepository;
 import com.chijey.startup.common.base.Result;
 import com.chijey.startup.security.domain.User;
@@ -7,6 +9,8 @@ import com.chijey.startup.security.service.UserService;
 import com.chijey.startup.utils.RepositoryUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;

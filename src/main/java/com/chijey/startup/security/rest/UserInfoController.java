@@ -1,11 +1,13 @@
 package com.chijey.startup.security.rest;
 
+import com.chijey.startup.param.PersonDTO;
 import com.chijey.startup.security.domain.User;
 import com.chijey.startup.security.service.UserInfoService;
 import com.chijey.startup.param.UserInfoDTO;
 import com.chijey.startup.param.VerifyDTO;
 import com.chijey.startup.security.domain.UserInfo;
 import com.chijey.startup.security.service.UserService;
+import com.chijey.startup.utils.ConvertUtils;
 import com.chijey.startup.vo.UserVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -51,5 +55,16 @@ public class UserInfoController {
         userVO.setUserInfo(userInfo);
         return ResponseEntity.ok(userVO);
     }
+
+    @ApiOperation("获取用户")
+    @PostMapping("/pagination")
+    public ResponseEntity pagination(@RequestBody PersonDTO param, @RequestParam("page") Integer page, @RequestParam("size") Integer size,
+                                     @RequestParam(value = "sort",defaultValue = "createTime") String sorts) {
+        Pageable pageable = ConvertUtils.pagingConvert(page,size,sorts);
+        Page<UserInfo> userspage = userInfoService.pageination(param,pageable);
+        return ResponseEntity.ok(userspage);
+    }
+
+
 
 }
