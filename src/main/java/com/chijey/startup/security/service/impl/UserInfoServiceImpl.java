@@ -67,6 +67,9 @@ public class UserInfoServiceImpl implements UserInfoService {
         IdCardVerify.IdentityCardVerification(verifyDTO.getIdCard());
 
         UserInfo userInfo = userInfoRepository.findByOpenId(openId);
+        if(userInfo == null){
+            throw new RuntimeException("请先完善个人信息！");
+        }
         if(userInfo.getIsRealNameValid()==1){
             throw new RuntimeException("已经实名认证！");
         }
