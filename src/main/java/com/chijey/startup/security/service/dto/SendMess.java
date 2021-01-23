@@ -6,7 +6,12 @@ package com.chijey.startup.security.service.dto;
  */
 public class SendMess {
     private String toUserId;
+    /**
+     * log 消息发送
+     * userList 在线用户
+     */
     private String cmd;
+
     private Object data;
 
 
