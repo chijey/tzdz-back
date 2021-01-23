@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@ServerEndpoint("/webSocket/{sid}")
+@ServerEndpoint("/webSocket/{openId}")
 @Component
 public class WebSocketServer {
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
@@ -50,10 +50,10 @@ public class WebSocketServer {
 
     //建立连接成功调用
     @OnOpen
-    public void onOpen(Session session, @PathParam(value = "sid") String userName){
-        sessionPools.put(userName, session);
+    public void onOpen(Session session, @PathParam(value = "openId") String openId){
+        sessionPools.put(openId, session);
         addOnlineCount();
-        System.out.println(userName + "加入webSocket！当前人数为" + onlineNum);
+        System.out.println(openId + "加入webSocket！当前人数为" + onlineNum);
         List<String> userIds = new ArrayList();
         Enumeration<String> keys = sessionPools.keys();
         while(keys.hasMoreElements()){
@@ -72,10 +72,10 @@ public class WebSocketServer {
 
     //关闭连接时调用
     @OnClose
-    public void onClose(@PathParam(value = "sid") String userName){
-        sessionPools.remove(userName);
+    public void onClose(@PathParam(value = "openId") String openId){
+        sessionPools.remove(openId);
         subOnlineCount();
-        System.out.println(userName + "断开webSocket连接！当前人数为" + onlineNum);
+        System.out.println(openId + "断开webSocket连接！当前人数为" + onlineNum);
     }
 
     //收到客户端信息
