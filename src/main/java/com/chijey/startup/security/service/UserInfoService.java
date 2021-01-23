@@ -16,4 +16,6 @@ public interface UserInfoService {
     UserInfo findByOpenId(String openId);
 
     Page<UserInfo> pageination(PersonDTO param, Pageable pageable);
+
+    void update(String openId, String url);
 }

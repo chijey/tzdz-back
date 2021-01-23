@@ -17,12 +17,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.UUID;
 
 
 @Service
+@Transactional(rollbackOn = Exception.class)
 public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
@@ -84,5 +86,10 @@ public class UserInfoServiceImpl implements UserInfoService {
     public Page<UserInfo> pageination(PersonDTO param, Pageable pageable) {
         Page<UserInfo> userInfoPage = userInfoRepository.findAll(pageable);
         return userInfoPage;
+    }
+
+    @Override
+    public void update(String openId, String url) {
+        userInfoRepository.updateAvator(openId,url);
     }
 }

@@ -7,8 +7,13 @@ import com.chijey.startup.param.UserInfoDTO;
 import com.chijey.startup.param.VerifyDTO;
 import com.chijey.startup.security.domain.UserInfo;
 import com.chijey.startup.security.service.UserService;
+import com.chijey.startup.security.utils.SecurityUtil;
 import com.chijey.startup.utils.ConvertUtils;
+import com.chijey.startup.utils.CosUtils;
+import com.chijey.startup.utils.FileUtil;
 import com.chijey.startup.vo.UserVO;
+import com.chijey.startup.wechat.miniprogram.service.WxMiniCrm;
+import com.qcloud.cos.model.PutObjectResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -18,7 +23,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 
 @Slf4j
@@ -63,6 +74,22 @@ public class UserInfoController {
         Pageable pageable = ConvertUtils.pagingConvert(page,size,sorts);
         Page<UserInfo> userspage = userInfoService.pageination(param,pageable);
         return ResponseEntity.ok(userspage);
+    }
+
+
+    @ApiOperation(value = "微信头像端上传文件")
+    @PostMapping(value = "/avator/fileUpload")
+    public ResponseEntity fileUpload(HttpServletRequest request) throws Exception {
+        MultipartHttpServletRequest req = (MultipartHttpServletRequest) request;
+        MultipartFile multipartFile = req.getFile("file");
+        String openId = SecurityUtil.getCurrentUserOpenId();
+        String suffix = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".")+1);
+        String key = "/avator/"+openId+"."+suffix;
+        CosUtils.uploadFile(key, FileUtil.multipartFileToFile(multipartFile));
+        String url = "https://tzdz-1304527316.cos.ap-chongqing.myqcloud.com"+key;
+        userInfoService.update(openId,url);
+        return ResponseEntity.ok(url);
+
     }
 
 

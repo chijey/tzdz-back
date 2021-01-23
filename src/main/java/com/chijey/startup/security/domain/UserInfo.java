@@ -6,6 +6,7 @@ import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import java.util.Date;
 @Entity
 @DynamicUpdate
 @DynamicInsert
+@Table(name = "user_info")
 public class UserInfo {
 
     @Id
@@ -48,6 +50,7 @@ public class UserInfo {
     private String corporation;//工作单位
     private Integer salary;
 
+    private String avatorUrl;
     private Date createTime;
     private Date updTime;
 
