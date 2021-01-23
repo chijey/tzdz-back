@@ -1,5 +1,6 @@
 package com.chijey.startup.security.rest;
 
+import com.chijey.startup.constant.Constant;
 import com.chijey.startup.param.PersonDTO;
 import com.chijey.startup.security.domain.User;
 import com.chijey.startup.security.service.UserInfoService;
@@ -30,6 +31,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 
 @Slf4j
@@ -86,9 +90,26 @@ public class UserInfoController {
         String suffix = multipartFile.getOriginalFilename().substring(multipartFile.getOriginalFilename().lastIndexOf(".")+1);
         String key = "/avator/"+openId+"."+suffix;
         CosUtils.uploadFile(key, FileUtil.multipartFileToFile(multipartFile));
-        String url = "https://tzdz-1304527316.cos.ap-chongqing.myqcloud.com"+key;
+        String url = Constant.COS_BUCKET_SERVER +key;
         userInfoService.update(openId,url);
         return ResponseEntity.ok(url);
+
+    }
+    @ApiOperation(value = "微信生活照上传文件")
+    @PostMapping(value = "/life/fileUpload")
+    public ResponseEntity lifefileUpload(MultipartFile [] files) throws Exception {
+        List<String> picturesPath = new ArrayList<>();
+        String openId = SecurityUtil.getCurrentUserOpenId();
+        for(MultipartFile file:files){
+            String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            String picId = UUID.randomUUID().toString();
+            String key = "/avator/"+openId+"/"+picId+"."+suffix;
+            String url = Constant.COS_BUCKET_SERVER +key;
+            CosUtils.uploadFile(key, FileUtil.multipartFileToFile(file));
+            picturesPath.add(url);
+        }
+        userInfoService.updateLifePhotos(openId,picturesPath);
+        return ResponseEntity.ok(picturesPath);
 
     }
 

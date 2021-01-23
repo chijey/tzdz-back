@@ -7,10 +7,8 @@ import com.qcloud.cos.auth.BasicCOSCredentials;
 import com.qcloud.cos.auth.COSCredentials;
 import com.qcloud.cos.model.PutObjectResult;
 import com.qcloud.cos.region.Region;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
-import java.io.IOException;
 
 public class CosUtils {
     public static COSCredentials credentials = new BasicCOSCredentials("AKIDd3KBm7fc1A2TVHvoa8PPN7cqmUxdCGFy","bw2ScWFjxuZAWZQ6lMioaSItPUcV8w6g");
@@ -21,9 +19,5 @@ public class CosUtils {
     public static PutObjectResult uploadFile(String key, File file){
         return  cosClient.putObject(BUCKET_NAME,key,file);
     }
-//    public static PutObjectResult uploadInputStream(String key, MultipartFile file) throws IOException {
-//        cosClient.putObject(BUCKET_NAME,"test",file.getInputStream(),"test");
-//        return  cosClient.putObject(BUCKET_NAME,key,file);
-//    }
 
 }

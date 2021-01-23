@@ -86,4 +86,6 @@ public class Constant {
      * 定义unknown字串串的常量
      */
     public  static final String UNKNOWN = "unknown";
+
+    public static final String COS_BUCKET_SERVER="https://tzdz-1304527316.cos.ap-chongqing.myqcloud.com";
 }
