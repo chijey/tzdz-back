@@ -2,6 +2,8 @@ package com.chijey.startup.security.rest;
 
 import com.chijey.startup.security.service.AuthService;
 import com.chijey.startup.security.service.dto.AuthUserDto;
+import com.chijey.startup.utils.ResultVOUtil;
+import com.chijey.startup.vo.ResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +32,8 @@ public class AuthController {
 
     @ApiOperation("登录授权")
     @PostMapping(value = "/login")
-    public ResponseEntity login(@RequestBody AuthUserDto authUserDto, HttpServletRequest request) {
-        return ResponseEntity.ok(authService.login(authUserDto, request));
+    public ResultVO login(@RequestBody AuthUserDto authUserDto, HttpServletRequest request) {
+        return ResultVOUtil.success(authService.login(authUserDto, request));
     }
 
 }
