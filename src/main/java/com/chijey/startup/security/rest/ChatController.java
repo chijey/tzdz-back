@@ -13,6 +13,7 @@ import com.chijey.startup.utils.ConvertUtils;
 import com.chijey.startup.utils.CosUtils;
 import com.chijey.startup.utils.FileUtil;
 import com.chijey.startup.utils.ResultVOUtil;
+import com.chijey.startup.vo.MessageVO;
 import com.chijey.startup.vo.ResultVO;
 import com.chijey.startup.vo.UserVO;
 import io.swagger.annotations.Api;
@@ -28,9 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Slf4j
@@ -51,6 +50,24 @@ public class ChatController {
         return ResultVOUtil.success(users);
     }
 
+    @ApiOperation("获取聊天信息")
+    @GetMapping("/loadMessage")
+    public ResultVO loadMSG(@RequestParam String toOpenId) {
+        MessageVO messageVO = new MessageVO();
+        messageVO.setTime(new Date());
+        messageVO.setSpeakerName("zhangsan");
+        messageVO.setContent("在干嘛");
+        messageVO.setContentType("txt");
+        messageVO.setSenderId("oYKvQ4loRf06v7_akcCf0FwtfRK0");
+        MessageVO messageVO2 = new MessageVO();
+        messageVO2.setTime(new Date());
+        messageVO2.setSpeakerName("zhangsan");
+        messageVO2.setContent("过年了哦");
+        messageVO2.setContentType("txt");
+        messageVO2.setSenderId("oYKvQ4loRf06v7_akcCf0FwtfRK1");
+        List<MessageVO>  msg = Arrays.asList(messageVO,messageVO2);
+        return ResultVOUtil.success(msg);
+    }
 
 
 
