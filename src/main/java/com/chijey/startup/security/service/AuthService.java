@@ -20,5 +20,5 @@ public interface AuthService {
      * @param request Http请求
      * @return 认证用户返回信息
      */
-    Result<AuthUserDto> login(AuthUserDto authUserDto, HttpServletRequest request);
+    Result<AuthUserDto>  login(AuthUserDto authUserDto, HttpServletRequest request);
 }
