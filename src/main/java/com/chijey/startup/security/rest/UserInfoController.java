@@ -102,7 +102,7 @@ public class UserInfoController {
         for(MultipartFile file:files){
             String suffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
             String picId = UUID.randomUUID().toString();
-            String key = "/avator/"+openId+"/"+picId+"."+suffix;
+            String key = "/life/"+openId+"/"+picId+"."+suffix;
             String url = Constant.COS_BUCKET_SERVER +key;
             CosUtils.uploadFile(key, FileUtil.multipartFileToFile(file));
             picturesPath.add(url);
