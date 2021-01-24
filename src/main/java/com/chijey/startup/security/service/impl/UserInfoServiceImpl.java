@@ -99,6 +99,6 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public void updateLifePhotos(String openId, List<String> picturesPath) {
-        userInfoRepository.updateLifePhotos(openId,picturesPath.toString());
+        userInfoRepository.updateLifePhotos(openId,picturesPath.toString().substring(1,picturesPath.toString().length()-1));
     }
 }

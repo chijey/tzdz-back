@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -78,5 +79,12 @@ public class UserServiceImpl implements UserService {
     public Result<User> findByUserName(String userName) {
         return new Result<User>().ok(userRepository.findByUserName(userName));
     }
+
+    @Override
+    public List<User> finAll() {
+        List<User> users = userRepository.findAll();
+        return users;
+    }
+
 
 }
