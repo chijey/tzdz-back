@@ -118,6 +118,8 @@ public class WebSocketServer {
         Session session = sessionPools.get(toUserId);
         Message msg = new Message();
         BeanUtils.copyProperties(message,msg);
+        msg.setData(u.getData().toString());
+        msg.setContentType("txt");
         msg.setCreateTime(new Date());
         msg.setUUID(UUID.randomUUID().toString());
         messageService.save(msg);
