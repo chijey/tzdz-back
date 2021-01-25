@@ -2,22 +2,36 @@ package com.chijey.startup.security.service;
 
 
 import com.alibaba.fastjson.JSON;
+import com.chijey.startup.security.config.JwtSecurityProperties;
+import com.chijey.startup.security.domain.Message;
 import com.chijey.startup.security.service.dto.SendMess;
+import com.chijey.startup.security.utils.JwtTokenUtils;
+import com.chijey.startup.security.utils.SecurityUtil;
+import com.chijey.startup.utils.SpringContextHolder;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
+import org.springframework.util.StringUtils;
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @ServerEndpoint("/webSocket/{openId}")
 @Component
+@Slf4j
 public class WebSocketServer {
+    @Autowired
+    private JwtTokenUtils jwtTokenUtils;
+
+    @Autowired
+    private MessageService messageService;
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static AtomicInteger onlineNum = new AtomicInteger();
 
@@ -50,7 +64,24 @@ public class WebSocketServer {
 
     //建立连接成功调用
     @OnOpen
-    public void onOpen(Session session, @PathParam(value = "openId") String openId){
+    public void onOpen(Session session,@PathParam(value = "openId")String openId){
+        JwtSecurityProperties jwtSecurityProperties = SpringContextHolder.getBean(JwtSecurityProperties.class);
+        String token = null;
+        String bearerToken = token;
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(jwtSecurityProperties.getTokenStartWith())) {
+            token = bearerToken.substring(jwtSecurityProperties.getTokenStartWith().length());
+        }
+        if (StringUtils.hasText(token) && jwtTokenUtils.validateToken(token)) {
+            Authentication authentication = jwtTokenUtils.getAuthentication(token);
+            if (authentication != null) {
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                openId = authentication.getName();
+                log.debug("set Authentication to security context for '{}', websocket: {}", authentication.getName());
+            }
+        } else {
+            log.debug("no valid JWT token found, websocket token : {}", token);
+        }
+
         sessionPools.put(openId, session);
         addOnlineCount();
         System.out.println(openId + "加入webSocket！当前人数为" + onlineNum);
@@ -85,6 +116,11 @@ public class WebSocketServer {
         System.out.println("客户端：" + message + ",已收到");
         String toUserId = u.getToUserId();
         Session session = sessionPools.get(toUserId);
+        Message msg = new Message();
+        BeanUtils.copyProperties(message,msg);
+        msg.setCreateTime(new Date());
+        msg.setUUID(UUID.randomUUID().toString());
+        messageService.save(msg);
         //只发给指定人
         if(session!=null){
             try {

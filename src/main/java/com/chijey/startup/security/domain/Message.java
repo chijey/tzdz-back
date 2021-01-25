@@ -1,13 +1,14 @@
-package com.chijey.startup.security.service.dto;
+package com.chijey.startup.security.domain;
 
 import lombok.Data;
 
-/**
- * @Author xxs
- * @Date 2020/6/27 22:10
- */
+import javax.persistence.Id;
+import java.util.Date;
+
 @Data
-public class SendMess {
+public class Message {
+    @Id
+    private String UUID;
     private String toUserId;
     /**
      * log 消息发送
@@ -18,6 +19,8 @@ public class SendMess {
     private Object data;
 
     private String senderOpenId;
+
+    private Date createTime;
 
 
 }
