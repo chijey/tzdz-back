@@ -6,6 +6,7 @@ import com.chijey.startup.security.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional(rollbackOn = Exception.class)
@@ -17,5 +18,11 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public Message save(Message message) {
         return messageRepository.save(message);
+    }
+
+    @Override
+    public List<Message> findByToUserIdAndSenderId(String toOpenId, String openId) {
+        List<Message> messages = messageRepository.findByToUserIdAndSenderId(toOpenId,openId);
+        return messages;
     }
 }

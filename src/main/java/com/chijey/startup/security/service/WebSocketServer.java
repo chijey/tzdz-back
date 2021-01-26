@@ -121,7 +121,7 @@ public class WebSocketServer {
         msg.setData(u.getData().toString());
         msg.setContentType("txt");
         msg.setCreateTime(new Date());
-        msg.setUUID(UUID.randomUUID().toString());
+        msg.setId(UUID.randomUUID().toString());
         messageService.save(msg);
         //只发给指定人
         if(session!=null){

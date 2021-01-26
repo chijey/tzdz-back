@@ -4,8 +4,10 @@ import com.chijey.startup.constant.Constant;
 import com.chijey.startup.param.PersonDTO;
 import com.chijey.startup.param.UserInfoDTO;
 import com.chijey.startup.param.VerifyDTO;
+import com.chijey.startup.security.domain.Message;
 import com.chijey.startup.security.domain.User;
 import com.chijey.startup.security.domain.UserInfo;
+import com.chijey.startup.security.service.MessageService;
 import com.chijey.startup.security.service.UserInfoService;
 import com.chijey.startup.security.service.UserService;
 import com.chijey.startup.security.utils.SecurityUtil;
@@ -42,6 +44,9 @@ public class ChatController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MessageService messageService;
+
 
     @ApiOperation("获取用户")
     @GetMapping("/{openId}")
@@ -53,23 +58,10 @@ public class ChatController {
     @ApiOperation("获取聊天信息")
     @GetMapping("/loadMessage")
     public ResultVO loadMSG(@RequestParam String toOpenId) {
-        MessageVO messageVO = new MessageVO();
-        messageVO.setTime(new Date());
-        messageVO.setSpeakerName("zhangsan");
-        messageVO.setContent("在干嘛");
-        messageVO.setContentType("txt");
-        messageVO.setSenderId("oYKvQ4loRf06v7_akcCf0FwtfRK0");
-        MessageVO messageVO2 = new MessageVO();
-        messageVO2.setTime(new Date());
-        messageVO2.setSpeakerName("zhangsan");
-        messageVO2.setContent("过年了哦");
-        messageVO2.setContentType("txt");
-        messageVO2.setSenderId("oYKvQ4loRf06v7_akcCf0FwtfRK1");
-        List<MessageVO>  msg = Arrays.asList(messageVO,messageVO2);
-        return ResultVOUtil.success(msg);
+        String openId = SecurityUtil.getCurrentUserOpenId();
+        List<Message> messages = messageService.findByToUserIdAndSenderId(toOpenId,openId);
+        return ResultVOUtil.success(messages);
     }
-
-
 
 
 }

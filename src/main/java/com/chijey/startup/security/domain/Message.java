@@ -13,7 +13,8 @@ import java.util.Date;
 @Table(name = "message")
 public class Message {
     @Id
-    private String UUID;
+    private String id;
+    private String senderOpenId;
     private String toUserId;
     /**
      * log 消息发送
@@ -22,8 +23,6 @@ public class Message {
     private String cmd;
 
     private String data;
-
-    private String senderOpenId;
 
     private Date createTime;
     private String contentType;
