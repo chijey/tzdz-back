@@ -6,11 +6,9 @@ import com.chijey.startup.security.config.JwtSecurityProperties;
 import com.chijey.startup.security.domain.Message;
 import com.chijey.startup.security.service.dto.SendMess;
 import com.chijey.startup.security.utils.JwtTokenUtils;
-import com.chijey.startup.security.utils.SecurityUtil;
 import com.chijey.startup.utils.SpringContextHolder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -27,11 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Component
 @Slf4j
 public class WebSocketServer {
-    @Autowired
-    private JwtTokenUtils jwtTokenUtils;
+    public static JwtTokenUtils jwtTokenUtils;
+    public static MessageService messageService;
 
-    @Autowired
-    private MessageService messageService;
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static AtomicInteger onlineNum = new AtomicInteger();
 
@@ -119,9 +115,13 @@ public class WebSocketServer {
         Message msg = new Message();
         BeanUtils.copyProperties(message,msg);
         msg.setData(u.getData().toString());
+        msg.setChatId(generateChatID(toUserId,u.getSenderOpenId()));
         msg.setContentType("txt");
+        msg.setCmd("log");
         msg.setCreateTime(new Date());
         msg.setId(UUID.randomUUID().toString());
+        msg.setSenderOpenId(u.getSenderOpenId());
+        msg.setToUserId(u.getToUserId());
         messageService.save(msg);
         //只发给指定人
         if(session!=null){
@@ -132,6 +132,8 @@ public class WebSocketServer {
             }
         }
     }
+
+
 
     //错误时调用
     @OnError
@@ -147,6 +149,16 @@ public class WebSocketServer {
     public static void subOnlineCount() {
         onlineNum.decrementAndGet();
     }
+
+    private String generateChatID(String toUserId, String senderOpenId) {
+        if(toUserId ==null |senderOpenId == null){
+            throw new RuntimeException("聊天对象ID不能为空 toUserId:"+toUserId+"  senderOpenId="+senderOpenId);
+        }
+        List<String> ids = Arrays.asList(toUserId,senderOpenId);
+        Collections.sort(ids);
+        return  ids.get(0)+ids.get(1);
+    }
+
 
 
 }

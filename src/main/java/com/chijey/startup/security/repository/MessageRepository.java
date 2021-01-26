@@ -15,4 +15,7 @@ public interface MessageRepository extends JpaRepository<Message, String> , JpaS
     @Query(value = " select m from Message m where  m.toUserId in(?1,?2) and m.senderOpenId in(?1,?2) order by m.createTime asc")
     List<Message>  findByToUserIdAndSenderId(String toUserId, String senderId);
 
+    @Modifying(clearAutomatically = true)
+    @Query(value = " select m from Message m where  m.toUserId=?1 or m.senderOpenId=?1 group by m.chatId order by m.createTime asc")
+    List<Message> findChatWith(String openId);
 }

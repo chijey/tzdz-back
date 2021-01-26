@@ -28,6 +28,10 @@ public class Message {
     private String contentType;
 
     private String imagePath;
+    /**
+     * 用户之间聊天的唯一标识
+     */
+    private String chatId;
 
 
 }

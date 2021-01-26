@@ -3,6 +3,7 @@ package com.chijey.startup.security.service.impl;
 import com.chijey.startup.security.domain.Message;
 import com.chijey.startup.security.repository.MessageRepository;
 import com.chijey.startup.security.service.MessageService;
+import com.chijey.startup.vo.UserChatVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
@@ -23,6 +24,12 @@ public class MessageServiceImpl implements MessageService {
     @Override
     public List<Message> findByToUserIdAndSenderId(String toOpenId, String openId) {
         List<Message> messages = messageRepository.findByToUserIdAndSenderId(toOpenId,openId);
+        return messages;
+    }
+
+    @Override
+    public List<Message> findChatWith(String openId) {
+        List<Message> messages = messageRepository.findChatWith(openId);
         return messages;
     }
 }

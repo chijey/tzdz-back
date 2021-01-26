@@ -75,4 +75,5 @@ public interface UserService {
     Result<User> findByUserName(String userName);
 
     List<User> finAll();
+
 }
