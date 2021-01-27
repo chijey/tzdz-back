@@ -88,13 +88,13 @@ public class WebSocketServer {
             userIds.add(value);
         }
         System.out.println("=============当前用户：" + userIds.toString());//打印当前参与聊天人数
-        for(Session s:sessionPools.values()){
-            try {
-                sendMessageByCmd(s,"userList",userIds);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+//        for(Session s:sessionPools.values()){
+//            try {
+////                sendMessageByCmd(s,"userList",userIds);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 
     //关闭连接时调用
