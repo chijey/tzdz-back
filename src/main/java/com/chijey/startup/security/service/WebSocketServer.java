@@ -108,6 +108,10 @@ public class WebSocketServer {
     //收到客户端信息
     @OnMessage
     public void onMessage(String message) throws IOException{
+        if("ping".equals(message)){
+            log.info("接受到心跳..");
+            return;
+        }
         SendMess u = JSON.parseObject(message, SendMess.class);
         System.out.println("客户端：" + message + ",已收到");
         String toUserId = u.getToUserId();
