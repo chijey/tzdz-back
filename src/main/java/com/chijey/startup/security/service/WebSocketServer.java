@@ -107,15 +107,16 @@ public class WebSocketServer {
 
     //收到客户端信息
     @OnMessage
-    public void onMessage(String message) throws IOException{
+    public void onMessage(String message,Session session) throws IOException{
         if("ping".equals(message)){
             log.info("接受到心跳..");
+            sendMessageByCmd(session,"log","pong");
             return;
         }
         SendMess u = JSON.parseObject(message, SendMess.class);
         System.out.println("客户端：" + message + ",已收到");
         String toUserId = u.getToUserId();
-        Session session = sessionPools.get(toUserId);
+        session = sessionPools.get(toUserId);
         Message msg = new Message();
         BeanUtils.copyProperties(message,msg);
         msg.setData(u.getData().toString());
