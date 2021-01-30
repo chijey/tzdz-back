@@ -12,7 +12,7 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, String> , Jp
     UserInfo findByOpenId(String openId);
 
     @Modifying(clearAutomatically = true)
-    @Query(value = " UPDATE UserInfo SET avatorUrl=?2 WHERE openId = ?1")
+    @Query(value = " UPDATE UserInfo SET getAvatarUrl=?2 WHERE openId = ?1")
     void updateAvator(String openId, String url);
 
 

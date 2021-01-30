@@ -50,7 +50,7 @@ public class UserInfo {
     private String corporation;//工作单位
     private Integer salary;
 
-    private String avatorUrl;
+    private String avatarUrl;
     private Date createTime;
     private Date updTime;
 
