@@ -23,5 +23,6 @@ public class UserInfoDTO {
     private Integer isBuyHouse;
     private String corporation;//工作单位
     private Integer salary;
+    private String avatarUrl;
 
 }
