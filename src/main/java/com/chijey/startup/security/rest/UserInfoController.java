@@ -93,10 +93,12 @@ public class UserInfoController {
         String key = "/avator/"+openId+"."+suffix;
         CosUtils.uploadFile(key, FileUtil.multipartFileToFile(multipartFile));
         String url = Constant.COS_BUCKET_SERVER +key;
-        userInfoService.update(openId,url);
+//        userInfoService.update(openId,url);
         return ResultVOUtil.success(url);
-
     }
+
+
+
     @ApiOperation(value = "微信生活照上传文件")
     @PostMapping(value = "/life/fileUpload")
     public ResultVO lifefileUpload(MultipartFile [] files) throws Exception {
