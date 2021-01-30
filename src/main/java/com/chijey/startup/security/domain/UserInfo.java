@@ -32,6 +32,8 @@ public class UserInfo {
     private String lifePhotos;
     private String job;
     private String skill;
+    private String nickName;
+    private Integer gender;
 
     private Integer isAdmin;
     private String openId;
