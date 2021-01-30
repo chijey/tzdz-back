@@ -3,7 +3,9 @@ package com.chijey.startup.security.rest;
 import com.chijey.startup.common.base.Result;
 import com.chijey.startup.constant.Constant;
 import com.chijey.startup.param.PersonDTO;
+import com.chijey.startup.security.domain.Message;
 import com.chijey.startup.security.domain.User;
+import com.chijey.startup.security.service.MessageService;
 import com.chijey.startup.security.service.UserInfoService;
 import com.chijey.startup.param.UserInfoDTO;
 import com.chijey.startup.param.VerifyDTO;
@@ -30,9 +32,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 @Slf4j
@@ -46,6 +46,9 @@ public class UserInfoController {
     private UserInfoService userInfoService;
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private MessageService messageService;
     @ApiOperation("个人信息完善")
     @PostMapping("/info")
     public ResultVO data(@RequestBody UserInfoDTO userInfoDTO) {
@@ -110,6 +113,30 @@ public class UserInfoController {
         userInfoService.updateLifePhotos(openId,picturesPath);
         return ResultVOUtil.success(picturesPath);
 
+    }
+
+    @ApiOperation("like用户")
+    @GetMapping("/like/{openId}")
+    public ResultVO like(@PathVariable String openId) {
+        Message msg = new Message();
+        msg.setData("liked");
+        msg.setChatId(generateChatID(openId,SecurityUtil.getCurrentUserOpenId()));
+        msg.setContentType("txt");
+        msg.setCmd("log");
+        msg.setCreateTime(new Date());
+        msg.setId(UUID.randomUUID().toString());
+        msg.setSenderOpenId(SecurityUtil.getCurrentUserOpenId());
+        msg.setToUserId(openId);
+        messageService.save(msg);
+        return ResultVOUtil.success(msg);
+    }
+    private String generateChatID(String toUserId, String senderOpenId) {
+        if(toUserId ==null |senderOpenId == null){
+            throw new RuntimeException("聊天对象ID不能为空 toUserId:"+toUserId+"  senderOpenId="+senderOpenId);
+        }
+        List<String> ids = Arrays.asList(toUserId,senderOpenId);
+        Collections.sort(ids);
+        return  ids.get(0)+ids.get(1);
     }
 
 
